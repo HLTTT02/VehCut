@@ -1,0 +1,8 @@
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
+import App from "./App";
+import "./vehicle-reset.css";
+import "./vehicle-modules.css";
+import "./vehicle-analysis.css";
+import "./vehicle-overview.css";
+createRoot(document.getElementById("root")!).render(<StrictMode><App /></StrictMode>);

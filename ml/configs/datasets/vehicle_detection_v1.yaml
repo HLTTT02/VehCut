@@ -1,0 +1,9 @@
+path: ml/data/curated/vehicle_detection_v1
+train: train/images
+val: val/images
+test: test/images
+names:
+  0: car
+  1: motorcycle
+  2: bus
+  3: truck

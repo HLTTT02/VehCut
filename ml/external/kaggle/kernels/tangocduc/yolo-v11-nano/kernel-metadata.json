@@ -1,0 +1,26 @@
+{
+  "id": "tangocduc/yolo-v11-nano",
+  "id_no": 87207208,
+  "title": "YOLO V11 Nano",
+  "code_file": "yolo-v11-nano.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": false,
+  "enable_gpu": true,
+  "enable_tpu": false,
+  "enable_internet": true,
+  "keywords": [
+    "gpu"
+  ],
+  "dataset_sources": [
+    "duydieunguyen/licenseplates"
+  ],
+  "kernel_sources": [],
+  "competition_sources": [],
+  "model_sources": [
+    "",
+    "tangocduc/yolov11-lp-nano/Other/default/1"
+  ],
+  "docker_image": "gcr.io/kaggle-private-byod/python@sha256:320043e14c68293f1c946585b9257123385205a58af4b94b17d31868cae4e868",
+  "machine_shape": "NvidiaTeslaT4"
+}

@@ -1,0 +1,8 @@
+{
+  "model_name": "yolo26s_vehicle_v1",
+  "status": "placeholder",
+  "task": "detect",
+  "classes": ["car", "motorcycle", "bus", "truck"],
+  "artifact": "best.pt",
+  "note": "Copy the approved best.pt from a completed Colab experiment here."
+}

@@ -1,0 +1,16 @@
+READMD.md
+.env
+frontend/node_modules
+frontend/dist
+ml/data/raw/
+ml/data/interim/
+ml/data/processed/
+ml/data/curated/
+ml/data/manifests/*.json
+ml/data/manifests/*.csv
+ml/experiments/
+ml/results/previews/
+model_weights/**/*.pt
+model_weights/**/*.onnx
+__pycache__/
+*.pyc

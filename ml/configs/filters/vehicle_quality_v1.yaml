@@ -1,0 +1,7 @@
+allowed_classes: [car, motorcycle, bus, truck]
+min_image_width: 640
+min_image_height: 360
+min_box_width_px: 12
+min_box_height_px: 12
+remove_duplicates: true
+seed: 42

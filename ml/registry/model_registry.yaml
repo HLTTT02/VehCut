@@ -1,0 +1,13 @@
+vehicle_detector:
+  active_version: yolo26s_pretrained
+  models:
+    yolo26s_pretrained:
+      path: /models/yolo26s.pt
+      task: detect
+      classes: [car, motorcycle, bus, truck]
+      confidence_threshold: 0.50
+    yolo26s_vehicle_v1:
+      path: /models/vehicle_detector/yolo26s_vehicle_v1/best.pt
+      task: detect
+      classes: [car, motorcycle, bus, truck]
+      status: awaiting_training

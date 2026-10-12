@@ -1,0 +1,11 @@
+model: yolo26s.pt
+task: detect
+data: ml/configs/datasets/vehicle_detection_v1.yaml
+epochs: 80
+imgsz: 640
+batch: 4
+device: cpu
+project: ml/experiments
+name: yolo26s_vehicle_v1
+patience: 20
+pretrained: true

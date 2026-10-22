@@ -107,7 +107,8 @@ class ByteTrackTrackingService:
 
     @staticmethod
     def _class_id(class_name: str) -> int:
-        classes = {"car": 2, "motorcycle": 3, "bus": 5, "truck": 7}
+        # Stable internal IDs. They do not have to match a custom model's class IDs.
+        classes = {"person": 0, "car": 2, "motorcycle": 3, "bus": 5, "truck": 7}
         try:
             return classes[class_name]
         except KeyError as error:
@@ -115,7 +116,7 @@ class ByteTrackTrackingService:
 
     @staticmethod
     def _class_name(class_id: int) -> str:
-        classes = {2: "car", 3: "motorcycle", 5: "bus", 7: "truck"}
+        classes = {0: "person", 2: "car", 3: "motorcycle", 5: "bus", 7: "truck"}
         try:
             return classes[class_id]
         except KeyError as error:

@@ -11,9 +11,21 @@ class Settings(BaseSettings):
     yolo_device: str = "cpu"
     yolo_confidence_threshold: float = 0.5
     yolo_image_size: int = 640
+    yolo_allowed_classes: str = "person,car,motorcycle"
+    plate_model_path: str = "/models/plate/best.pt"
+    plate_confidence_threshold: float = 0.4
     processing_frame_stride: int = 1
     celery_task_soft_time_limit_seconds: int = 3600
     celery_task_time_limit_seconds: int = 3660
     celery_task_max_retries: int = 3
+
+    @property
+    def detection_classes(self) -> frozenset[str]:
+        """Configured COCO class names accepted by the runtime detector."""
+        return frozenset(
+            class_name.strip().lower()
+            for class_name in self.yolo_allowed_classes.split(",")
+            if class_name.strip()
+        )
 
 settings = Settings()

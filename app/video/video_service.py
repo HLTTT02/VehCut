@@ -30,6 +30,14 @@ class VideoService:
     def get_metadata(self, video_path: str | Path) -> VideoMetadata:
         return self.validate_video(video_path)
 
+    def read_image(self, image_path: str | Path):
+        """Load one supported image for single-frame vehicle detection."""
+        path = self._require_file(image_path)
+        image = self._cv2().imread(str(path))
+        if image is None:
+            raise InvalidVideoError(f"Corrupt or unsupported image: {path}")
+        return image
+
     def extract_frame(self, video_path: str | Path, frame_index: int):
         if frame_index < 0:
             raise VideoProcessingError("frame_index must be non-negative")

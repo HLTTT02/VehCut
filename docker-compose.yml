@@ -31,7 +31,10 @@ services:
       redis: { condition: service_healthy }
     # Host port 8001 avoids conflict with another local project using 8000.
     ports: ["8001:8000"]
-    volumes: [vehcut-storage:/data/vehcut]
+    volumes:
+      - vehcut-storage:/data/vehcut
+      - ./model_weights/base/yolov8s:/models/vehicle:ro
+      - ./model_weights/plate_detector/vehcut02_plate_v1:/models/plate:ro
 
   worker:
     build:
@@ -44,7 +47,8 @@ services:
       redis: { condition: service_healthy }
     volumes:
       - vehcut-storage:/data/vehcut
-      - model-cache:/models
+      - ./model_weights/base/yolov8s:/models/vehicle:ro
+      - ./model_weights/plate_detector/vehcut02_plate_v1:/models/plate:ro
 
   frontend:
     build:
@@ -58,4 +62,3 @@ services:
 volumes:
   postgres-data:
   vehcut-storage:
-  model-cache:

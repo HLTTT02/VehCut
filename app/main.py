@@ -10,6 +10,8 @@ from app.api.controllers.job_controller import router as job_router
 from app.api.controllers.video_controller import router as video_router
 from app.api.controllers.history_controller import router as history_router
 from app.api.controllers.statistics_controller import router as statistics_router
+from app.api.controllers.roi_controller import router as roi_router
+from app.api.controllers.alert_controller import router as alert_router
 from app.core.exceptions import AppError
 
 logger = logging.getLogger(__name__)
@@ -22,6 +24,8 @@ def create_app() -> FastAPI:
     app.include_router(clip_router, prefix="/api")
     app.include_router(history_router, prefix="/api")
     app.include_router(statistics_router, prefix="/api")
+    app.include_router(roi_router, prefix="/api")
+    app.include_router(alert_router, prefix="/api")
 
     @app.exception_handler(AppError)
     async def app_error_handler(_: Request, error: AppError) -> JSONResponse:

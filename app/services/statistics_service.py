@@ -19,7 +19,7 @@ class StatisticsService:
         jobs = self._jobs.list(limit=10_000)
         tracks = self._tracks.list(limit=10_000)
         clips = self._clips.list(limit=10_000)
-        counts = {"car": 0, "motorcycle": 0, "truck": 0, "bus": 0}
+        counts = {"person": 0, "car": 0, "motorcycle": 0, "truck": 0, "bus": 0}
         for track in tracks:
             if track.vehicle_class in counts:
                 counts[track.vehicle_class] += 1

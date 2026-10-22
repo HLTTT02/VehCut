@@ -8,6 +8,7 @@ celery[redis]
 redis
 opencv-python
 ultralytics
-supervision
+supervision==0.25.1
 numpy
+pytesseract
 

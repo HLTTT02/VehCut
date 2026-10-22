@@ -27,3 +27,7 @@ class VideoService:
         if video is None:
             raise VideoNotFoundError("Video not found", details={"video_id": video_id})
         return video
+
+    def list_videos(self):
+        """Newest uploads first, for the dashboard source selector."""
+        return self._repository.list(limit=100)

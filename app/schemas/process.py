@@ -1,7 +1,7 @@
 from typing import Literal
 from pydantic import BaseModel, Field
 
-VehicleClass = Literal["car", "motorcycle", "bus", "truck"]
+VehicleClass = Literal["person", "car", "motorcycle", "bus", "truck"]
 
 class ProcessVideoRequest(BaseModel):
     confidence_threshold: float = Field(ge=0, le=1)

@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { AlertTriangle, BellRing, Camera, Car, CheckCircle2, ChevronDown, CircleAlert, Clock3, Download, Eye, FileVideo, Filter, Fullscreen, History, MoreVertical, Pause, Play, ShieldAlert, Upload, Volume2 } from "lucide-react";
+import { api } from "../api/client";
 import type { ModulePage } from "./VehicleAIModulePage";
 
 type Props = { onNavigate: (page: ModulePage) => void };
@@ -12,8 +13,41 @@ const alerts = [["Bike #18", "Không biển", "14:02", "red"], ["Car #09", "Lả
 
 export function VehicleAIOverview({ onNavigate }: Props) {
   const [tab, setTab] = useState<"objects" | "clips">("objects");
+  const uploadRef = useRef<HTMLInputElement>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [previewIsImage, setPreviewIsImage] = useState(false);
+  const [uploadStatus, setUploadStatus] = useState("READY");
+  useEffect(() => () => { if (previewUrl) URL.revokeObjectURL(previewUrl); }, [previewUrl]);
+  useEffect(() => {
+    const button = document.querySelector<HTMLButtonElement>(".vo-source button:first-of-type");
+    const openUploader = (event: MouseEvent) => { event.preventDefault(); uploadRef.current?.click(); };
+    button?.addEventListener("click", openUploader);
+    return () => button?.removeEventListener("click", openUploader);
+  }, []);
+  useEffect(() => {
+    const container = document.querySelector<HTMLElement>(".vo-video");
+    const fallback = container?.querySelector<HTMLImageElement>("img");
+    if (!container || !fallback) return;
+    const existing = container.querySelector<HTMLElement>(".vo-preview-media");
+    existing?.remove();
+    fallback.style.display = "none";
+    const media = previewUrl ? document.createElement(previewIsImage ? "img" : "video") : document.createElement("div");
+    media.className = "vo-preview-media";
+    if (previewUrl && (media instanceof HTMLImageElement || media instanceof HTMLMediaElement)) { media.src = previewUrl; if (media instanceof HTMLVideoElement) media.controls = true; }
+    if (!previewUrl) { media.textContent = "Chọn Upload video/image để xem nội dung tại đây"; }
+    container.prepend(media);
+  }, [previewUrl, previewIsImage]);
+  const choosePreview = async (file?: File) => {
+    if (!file) return;
+    if (previewUrl) URL.revokeObjectURL(previewUrl);
+    setPreviewIsImage(file.type.startsWith("image/"));
+    setPreviewUrl(URL.createObjectURL(file));
+    setUploadStatus("UPLOADING");
+    try { await api.uploadVideo(file); setUploadStatus("UPLOADED"); }
+    catch { setUploadStatus("UPLOAD ERROR"); }
+  };
   return <div className="vo-page">
-    <section className="vo-topbar">
+    <section className="vo-topbar"><input ref={uploadRef} className="vo-upload-input" type="file" accept="video/mp4,video/quicktime,video/x-msvideo,image/jpeg,image/png,image/webp" onChange={(event) => { void choosePreview(event.target.files?.[0]); }}/>
       <div className="vo-head"><h1>Phát hiện phương tiện khả nghi</h1><p>Phát hiện xe không biển, lảng vãng, quay lại, xuất hiện nhiều lần...</p></div>
       <div className="vo-source"><small>Nguồn dữ liệu</small><div><button onClick={() => onNavigate("analysis")}><FileVideo />Video Upload</button><button className="active" onClick={() => onNavigate("camera")}><Camera />Camera Live</button></div></div>
       <div className="vo-select"><small>Camera</small><button onClick={() => onNavigate("camera")}>Cổng chính <i>● ONLINE</i><ChevronDown /></button></div>

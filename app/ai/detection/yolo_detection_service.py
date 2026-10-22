@@ -6,17 +6,35 @@ from app.ai.detection.models import BoundingBox, DetectionResult
 if TYPE_CHECKING:
     import numpy as np
 
-_ALLOWED_CLASS_NAMES = {"car", "motorcycle", "bus", "truck"}
+_CLASS_NAME_ALIASES = {
+    "person": "person",
+    "car": "car",
+    "motorcycle": "motorcycle",
+    "motorbike": "motorcycle",
+    "bus": "bus",
+    "truck": "truck",
+}
 
 class YoloDetectionService:
     """Ultralytics adapter. Construct once per worker to load the model once."""
 
-    def __init__(self, model_path: str, confidence_threshold: float = 0.5, device: str | None = "cpu", image_size: int = 640) -> None:
+    def __init__(
+        self,
+        model_path: str,
+        confidence_threshold: float = 0.5,
+        device: str | None = "cpu",
+        image_size: int = 640,
+        allowed_classes: set[str] | frozenset[str] | None = None,
+    ) -> None:
         if not 0 <= confidence_threshold <= 1:
             raise ValueError("confidence_threshold must be between 0 and 1")
         self._confidence_threshold = confidence_threshold
         self._device = device
         self._image_size = image_size
+        self._allowed_classes = frozenset(allowed_classes or _CLASS_NAME_ALIASES.values())
+        unsupported = self._allowed_classes - set(_CLASS_NAME_ALIASES.values())
+        if unsupported:
+            raise ValueError(f"Unsupported YOLO classes: {sorted(unsupported)}")
         self._model = self._load_model(model_path)
 
     def detect(self, frame: "np.ndarray") -> list[DetectionResult]:
@@ -34,8 +52,9 @@ class YoloDetectionService:
                 continue
             for box in prediction.boxes:
                 class_id = int(box.cls[0].item())
-                class_name = str(prediction.names.get(class_id, "")).strip().lower()
-                if class_name not in _ALLOWED_CLASS_NAMES:
+                raw_class_name = str(prediction.names.get(class_id, "")).strip().lower()
+                class_name = _CLASS_NAME_ALIASES.get(raw_class_name)
+                if class_name is None or class_name not in self._allowed_classes:
                     continue
                 confidence = float(box.conf[0].item())
                 if confidence < self._confidence_threshold:

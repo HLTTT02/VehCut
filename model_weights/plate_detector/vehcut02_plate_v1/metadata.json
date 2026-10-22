@@ -1,0 +1,9 @@
+{
+  "model_type": "Ultralytics YOLO detection",
+  "task": "detect",
+  "classes": {
+    "0": "plate"
+  },
+  "source_filename": "best.pt",
+  "sha256": "36B7807C479826F166FF85BEE8274DECE202CE69EDE00CAF4515F8636106BD31"
+}

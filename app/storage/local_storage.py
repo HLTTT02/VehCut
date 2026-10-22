@@ -11,7 +11,7 @@ class LocalStorageService(StorageService):
     def __init__(self, root: Path, public_base_url: str = "/storage") -> None:
         self._root = root.resolve()
         self._public_base_url = public_base_url.rstrip("/")
-        for folder in ("originals", "clips", "roi"):
+        for folder in ("originals", "clips", "roi", "alerts"):
             (self._root / folder).mkdir(parents=True, exist_ok=True)
 
     def save_original_video(self, source: BinaryIO, filename: str) -> str:
@@ -22,6 +22,9 @@ class LocalStorageService(StorageService):
 
     def save_roi_clip(self, source: BinaryIO, filename: str) -> str:
         return self._save(source, "roi", filename)
+
+    def save_alert_image(self, source: BinaryIO, filename: str) -> str:
+        return self._save(source, "alerts", filename)
 
     def get_file(self, storage_path: str) -> Path:
         try:

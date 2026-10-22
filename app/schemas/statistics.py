@@ -1,6 +1,7 @@
 from pydantic import BaseModel
 
 class VehicleClassCounts(BaseModel):
+    person: int = 0
     car: int = 0
     motorcycle: int = 0
     truck: int = 0
